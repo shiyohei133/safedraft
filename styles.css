@@ -206,7 +206,7 @@ textarea:focus-visible {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 10px;
 }
-.controls-grid > label { display: grid; gap: 5px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.controls-grid > label, .controls-grid > .ctl { display: grid; gap: 5px; font-size: 13px; font-weight: 600; color: var(--muted); }
 .controls select {
   font: inherit;
   font-weight: 500;
