@@ -1,0 +1,1 @@
+{"hosting":{"ignore":["firebase.json",".firebaserc",".git/**","**/.*","**/node_modules/**","tests/**","scripts/**","package.json","package-lock.json","README.md","LICENSE"],"public":"."}}

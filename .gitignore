@@ -1,0 +1,18 @@
+node_modules/
+.env
+.env.*
+*.log
+.DS_Store
+.firebase/
+firebase-debug.log
+
+# Local-only secrets — NEVER commit these.
+# (src/firebase-config.js is intentionally committed: Firebase *web* config
+# values and the App Check site key are public identifiers, not secrets.
+# Real credentials are App Check debug tokens and service-account keys —
+# keep them out of the repo with the patterns below.)
+firebase-config.local.json
+*debug-token*
+service-account*.json
+*.key
+*.pem

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SafeDraft — The AI never sees your original text</title>
+    <meta
+      name="description"
+      content="SafeDraft masks personal data locally before AI rewriting, using Firebase AI Logic hybrid inference (on-device first, cloud fallback)."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛡️%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">🛡️</span>
+        <div>
+          <h1>SafeDraft</h1>
+          <p class="tagline">The AI never sees your original text.</p>
+        </div>
+      </div>
+      <p class="header-note">
+        Personal data is masked <strong>on your device</strong> by a deterministic
+        shield — before anything reaches an AI model.
+      </p>
+    </header>
+
+    <main class="layout">
+      <section class="card demo-card">
+        <div class="row between wrap">
+          <h2>▶ The 30-second demo</h2>
+          <button id="btn-demo" type="button" class="primary">Start the demo</button>
+        </div>
+        <p class="muted">
+          One click loads a support email containing <strong>13 pieces of personal
+          data</strong> — a name, email, phone, home address, invoice and customer
+          numbers, a card number, two amounts and two dates. Watch what the AI is
+          actually allowed to see.
+        </p>
+        <ol class="steps">
+          <li id="demo-step-1" class="step"><span class="step-n">1</span> Load the sample email</li>
+          <li id="demo-step-2" class="step"><span class="step-n">2</span> Shield masks 13 items locally</li>
+          <li id="demo-step-3" class="step"><span class="step-n">3</span> AI rewrites the masked text only</li>
+          <li id="demo-step-4" class="step"><span class="step-n">4</span> Your data is restored in the browser</li>
+        </ol>
+      </section>
+
+      <section class="card">
+        <h2>1 · Your draft</h2>
+        <textarea
+          id="input"
+          rows="11"
+          aria-label="Your draft (may contain personal data)"
+          placeholder="Paste a draft that contains personal data — names, emails, phone numbers, addresses, amounts…"
+        ></textarea>
+        <div class="row between">
+          <span id="char-count" class="muted"></span>
+          <span id="route-hint" class="muted"></span>
+        </div>
+        <div class="row wrap">
+          <button id="btn-sample-ja" type="button" class="ghost">Load sample (Japanese)</button>
+          <button id="btn-sample-en" type="button" class="ghost">Load sample (English)</button>
+          <button id="btn-shield" type="button">Apply shield</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2 · What the AI is allowed to see</h2>
+        <div id="shield-preview" class="preview">
+          <span class="muted">Masked text will appear here.</span>
+        </div>
+        <p id="shield-summary" class="summary"></p>
+        <ul id="entity-list" class="entity-list"></ul>
+        <p class="muted small">
+          The mapping between placeholders and your original values never
+          leaves this browser tab and is never stored.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>3 · Result</h2>
+        <fieldset class="controls">
+          <legend class="muted small">Generation options</legend>
+          <div class="controls-grid">
+            <label>
+              Task
+              <span class="segmented" role="radiogroup" aria-label="Task">
+                <label class="seg"><input type="radio" name="task" value="rewrite" checked /> Rewrite</label>
+                <label class="seg"><input type="radio" name="task" value="summarize" /> Summarize</label>
+              </span>
+            </label>
+            <label>
+              Style
+              <select id="opt-style">
+                <option value="polite" selected>Polite &amp; professional</option>
+                <option value="casual">Casual</option>
+                <option value="concise">Concise</option>
+              </select>
+            </label>
+            <label>
+              Summary length
+              <select id="opt-length" disabled>
+                <option value="brief">Brief (~25%)</option>
+                <option value="standard" selected>Standard (~50%)</option>
+                <option value="oneline">One line</option>
+              </select>
+            </label>
+            <label>
+              Versions
+              <select id="opt-variants">
+                <option value="1" selected>1 version</option>
+                <option value="2">2 versions</option>
+                <option value="3">3 versions</option>
+              </select>
+            </label>
+          </div>
+        </fieldset>
+        <div class="row between">
+          <span id="route-badge" class="badge badge-none">No generation yet</span>
+          <div class="row">
+            <button id="btn-copy" type="button" class="ghost">Copy result</button>
+            <button
+              id="btn-restore-demo"
+              type="button"
+              class="ghost"
+              title="Mask the text and restore it locally, without calling any AI — verifies that restoration is lossless"
+            >
+              Restore demo (no AI)
+            </button>
+            <button id="btn-ai" type="button" class="primary">Generate with AI</button>
+          </div>
+        </div>
+        <div id="result" class="preview result">
+          <span class="muted">The generated text, with your original values restored, will appear here.</span>
+        </div>
+        <div id="variants" class="variants" aria-live="polite"></div>
+        <p id="status" class="status" role="status"></p>
+      </section>
+
+      <section class="card">
+        <h2>Transparency log</h2>
+        <ul id="log" class="log"></ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Built with Firebase AI Logic hybrid inference (Gemini Nano on-device ·
+        Gemini in the cloud) for #BuildHybridAI 2026. Detection is heuristic —
+        please review the masked preview before sending.
+      </p>
+    </footer>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
