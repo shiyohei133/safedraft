@@ -60,6 +60,11 @@ function setStatus(message, isError = false) {
   els.status.classList.toggle("error", isError);
 }
 
+/** "1 item" / "2 items" — keeps user-facing counts grammatical. */
+function plural(n, one, many) {
+  return n === 1 ? one : many;
+}
+
 /** Translate raw SDK errors into something a first-time user can act on. */
 function friendlyError(err) {
   const msg = String(err?.message ?? err ?? "");
@@ -118,7 +123,7 @@ function renderShieldPreview() {
   const timing =
     lastShieldMs !== null ? ` in ${Math.max(1, Math.round(lastShieldMs))} ms` : "";
   els.shieldSummary.textContent = entities.length
-    ? `Shield applied${timing}: ${entities.length} item(s) masked (${parts.join(", ")}) — 0 items left your device.`
+    ? `Shield applied${timing}: ${entities.length} ${plural(entities.length, "item", "items")} masked (${parts.join(", ")}) — 0 items left your device.`
     : "Shield applied: no personal data detected.";
 }
 
@@ -134,7 +139,7 @@ function runShield({ log = true } = {}) {
   }
   if (log) {
     logEvent(
-      `Shield: ${lastMask.entities.length} item(s) masked. ` +
+      `Shield: ${lastMask.entities.length} ${plural(lastMask.entities.length, "item", "items")} masked. ` +
         `Route preview: ${chooseRoute(lastMask.maskedText) === "cloud" ? "Cloud (long text)" : "On-device preferred"}.`,
     );
   }
@@ -250,11 +255,11 @@ function variantTags(v) {
   const problems = v.missing.length + v.unknown.length;
   if (problems > 0) {
     tags.push(
-      `<span class="tag tag-warn">⚠ ${v.missing.length} lost · ${v.unknown.length} unknown placeholder(s)</span>`,
+      `<span class="tag tag-warn">⚠ ${v.missing.length} lost · ${v.unknown.length} unknown ${plural(v.unknown.length, "placeholder", "placeholders")}</span>`,
     );
   } else if (v.repaired.length > 0) {
     tags.push(
-      `<span class="tag tag-repaired">${v.repaired.length} placeholder(s) auto-repaired</span>`,
+      `<span class="tag tag-repaired">${v.repaired.length} ${plural(v.repaired.length, "placeholder", "placeholders")} auto-repaired</span>`,
     );
   } else {
     tags.push('<span class="tag tag-ok">✓ All data restored</span>');
@@ -318,7 +323,7 @@ async function runAiGenerate() {
     els.routeBadge.className =
       "badge " + (route === "On-device" ? "badge-device" : "badge-cloud");
     logEvent(
-      `AI ${task} finished: ${lastVariants.length} version(s). ` +
+      `AI ${task} finished: ${lastVariants.length} ${plural(lastVariants.length, "version", "versions")}. ` +
         `Inference route reported by SDK: ${route}.`,
     );
     for (const [i, v] of lastVariants.entries()) {
@@ -346,17 +351,17 @@ async function runAiGenerate() {
     const repairedCount = lastVariants.reduce((n, v) => n + v.repaired.length, 0);
     if (badVersions.length > 0) {
       setStatus(
-        `Done, but version(s) ${badVersions.join(", ")} have placeholder problems — see the tags on each card.`,
+        `Done, but ${badVersions.length === 1 ? `version ${badVersions[0]} has` : `versions ${badVersions.join(", ")} have`} placeholder problems — see the tags on each card.`,
         true,
       );
     } else if (repairedCount > 0) {
       setStatus(
-        `Done — ${lastVariants.length} version(s). ${repairedCount} placeholder(s) had been altered ` +
-          "by the model and were repaired before restoring locally in your browser.",
+        `Done — ${lastVariants.length} ${plural(lastVariants.length, "version", "versions")}. ${repairedCount} ${plural(repairedCount, "placeholder", "placeholders")} had been altered ` +
+          `by the model and ${repairedCount === 1 ? "was" : "were"} repaired before restoring locally in your browser.`,
       );
     } else {
       setStatus(
-        `Done — ${lastVariants.length} version(s), every placeholder restored locally in your browser. ` +
+        `Done — ${lastVariants.length} ${plural(lastVariants.length, "version", "versions")}, every placeholder restored locally in your browser. ` +
           (lastVariants.length > 1 ? "Click a version to select it." : ""),
       );
     }

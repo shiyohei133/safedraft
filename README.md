@@ -15,9 +15,10 @@ Built for **#BuildHybridAI 2026**.
 ## Try it in 30 seconds
 
 Click **“Start the demo”**. A realistic support email loads — it contains
-**13 pieces of personal data** (a name, an email, a phone number, a home
-address, invoice and customer numbers, a card number, two amounts, two
-dates). The shield masks all 13 locally, in milliseconds. Press
+**13 pieces of personal data** (the sender's name twice, an email, a phone
+number, a home address and ZIP code, invoice and customer numbers, a card
+number, two amounts, two dates). The shield masks all 13 locally, in
+milliseconds. Press
 **“Generate with AI”** and the model rewrites a text it could never trace
 back to a real person; your values are restored in the browser at the end.
 The badge on the result tells you whether the answer came from the
