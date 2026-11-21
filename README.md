@@ -172,6 +172,10 @@ tooling files from the deployed site.
 - On-device inference requires Chrome 139+ on desktop with Gemini Nano
   available; otherwise requests fall back to the cloud model (the badge
   always tells you which route actually served the response).
+- Bare numbers with no label or context anchor (e.g. "order 12345") are
+  intentionally left unmasked: a bare 5-digit run is indistinguishable
+  from a quantity or a year, so masking it would create false positives.
+  Labelled IDs ("Order ID: ORD-883120", "ticket No. 55213") are masked.
 - Placeholders are restored verbatim. If a model alters one, near-miss
   forms (different brackets, stray spaces, lower-casing, dropped
   brackets) are repaired automatically before restoration; placeholders

@@ -9,7 +9,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mask, restore, findLeaks, summarize } from "../src/pii-shield.js";
-import { SAMPLE_DEMO_EN } from "../src/samples.js";
+import { SAMPLE_DEMO_EN, SAMPLE_EN, SAMPLE_JA } from "../src/samples.js";
 
 test("demo email masks exactly 13 items across 9 types", () => {
   const { entities } = mask(SAMPLE_DEMO_EN);
@@ -37,4 +37,14 @@ test("demo email: nothing detected remains visible after masking", () => {
 test("demo email: mask → restore round-trip is lossless", () => {
   const { maskedText, entities } = mask(SAMPLE_DEMO_EN);
   assert.equal(restore(maskedText, entities), SAMPLE_DEMO_EN);
+});
+
+test("shorter samples mask exactly 10 items each (not the demo's 13)", () => {
+  // The "Load sample" buttons load different, shorter documents than the
+  // 13-item demo email. Pin their counts so a future edit cannot silently
+  // change what the UI's "10 items masked" summary reports.
+  for (const [name, sample] of [["SAMPLE_EN", SAMPLE_EN], ["SAMPLE_JA", SAMPLE_JA]]) {
+    const { entities } = mask(sample);
+    assert.equal(entities.length, 10, `${name}: expected exactly 10 entities, got ${entities.length}`);
+  }
 });
