@@ -86,7 +86,7 @@ characters.
   for judge testing (see below).
 - Vanilla JS ES modules — no build step. The PII shield, the prompt
   builder and the App Check token intake are pure modules shared by the
-  UI and the Node test suite (**80 unit tests**).
+  UI and the Node test suite (**81 unit tests**).
 
 ## Project structure
 
@@ -113,7 +113,7 @@ desktop (for on-device inference; the app still works via cloud fallback
 in other browsers).
 
 ```bash
-npm test          # 80 unit tests for the shield, prompts and token intake
+npm test          # 81 unit tests for the shield, prompts and token intake
 npm run dev       # http://localhost:5173
 ```
 
