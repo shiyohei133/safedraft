@@ -2,7 +2,7 @@
   --bg: #0f172a;
   --card: #ffffff;
   --ink: #0f172a;
-  --muted: #64748b;
+  --muted: #475569;
   --accent: #2563eb;
   --accent-ink: #ffffff;
   --border: #e2e8f0;
@@ -144,6 +144,19 @@ textarea:focus-visible {
 .summary { font-weight: 600; margin: 10px 0 0; }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
+
+/* Text for screen readers only (e.g. step completion state). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 .badge {
   border-radius: 999px;

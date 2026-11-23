@@ -159,6 +159,16 @@ function setDemoStep(n, state) {
   const el = els.demoSteps[n - 1];
   if (!el) return;
   el.classList.remove("active", "done");
+  el.removeAttribute("aria-current");
+  el.querySelector(".step-state")?.remove();
+  if (state === "active") el.setAttribute("aria-current", "step");
+  if (state === "done") {
+    // Screen readers get the completion state; sighted users see the color.
+    const marker = document.createElement("span");
+    marker.className = "visually-hidden step-state";
+    marker.textContent = " (completed)";
+    el.append(marker);
+  }
   if (state) el.classList.add(state);
 }
 
@@ -250,8 +260,8 @@ let selectedVariant = -1;
 
 function variantTags(v) {
   const tags = [];
-  if (lastRoute === "On-device") tags.push('<span class="tag tag-device">⚡ On-device</span>');
-  else if (lastRoute === "Cloud") tags.push('<span class="tag tag-cloud">☁ Cloud</span>');
+  if (lastRoute === "On-device") tags.push('<span class="tag tag-device"><span aria-hidden="true">⚡</span> On-device</span>');
+  else if (lastRoute === "Cloud") tags.push('<span class="tag tag-cloud"><span aria-hidden="true">☁</span> Cloud</span>');
   const problems = v.missing.length + v.unknown.length;
   if (problems > 0) {
     tags.push(
@@ -318,8 +328,10 @@ async function runAiGenerate() {
     selectedVariant = -1;
     if (lastVariants.length > 0) selectVariant(0);
 
-    els.routeBadge.textContent =
-      route === "On-device" ? "⚡ On-device" : route === "Cloud" ? "☁ Cloud" : `Route: ${route}`;
+    // Emoji is decorative; hide it from screen readers (badge text is
+    // otherwise announced). innerHTML is safe here: all parts are internal.
+    els.routeBadge.innerHTML =
+      route === "On-device" ? '<span aria-hidden="true">⚡</span> On-device' : route === "Cloud" ? '<span aria-hidden="true">☁</span> Cloud' : `Route: ${route}`;
     els.routeBadge.className =
       "badge " + (route === "On-device" ? "badge-device" : "badge-cloud");
     logEvent(
